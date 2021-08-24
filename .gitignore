@@ -1,0 +1,6 @@
+arcface_torch/ms1mv3_arcface_r18_fp16/*
+getget_refl_wiener_pinv/database_mono_image/*
+getget_refl_wiener_pinv/database_spectral_curve_excel/*
+getget_refl_wiener_pinv/test_image_one_pic/*
+UNet_N_31/checkpoint/*
+UNet_N_31/model/*
