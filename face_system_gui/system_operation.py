@@ -206,9 +206,10 @@ def msnet_get_recimage(net, image):
 
 
 def my_resize_256(image):
-    image = image[int(image.shape[0] / 2) - 1023:int(image.shape[0] / 2) + 1024, int(image.shape[1] / 2) - 1023:int(image.shape[1] / 2) + 1024, :].astype('float32')
-    image = image[0:image.shape[0]:8, 0:image.shape[1]:8, :] 
-    return image 
+    image = image[int(image.shape[0] / 2) - 1023:int(image.shape[0] / 2) + 1024,
+            int(image.shape[1] / 2) - 1023:int(image.shape[1] / 2) + 1024, :].astype('float32')
+    image = image[0:image.shape[0]:8, 0:image.shape[1]:8, :]
+    return image
 
 
 # other function 绘制9个点的光谱曲线
@@ -249,11 +250,11 @@ def show_spectral_curve(hyperspectral_mat, spectral_curve_wiener):
     plt.subplot(3, 3, 9)
     plt.plot(axis_x, hyper_spec_line_9)
     '''
-    #plt.figure(2)
+    # plt.figure(2)
     axis_x = np.linspace(420, 720, num=31)
     plt.clf()
     plt.title('Spectral curve by wiener')
-    plt.plot(axis_x, spectral_curve_wiener)    #显示wiener预测的光谱曲线
+    plt.plot(axis_x, spectral_curve_wiener)  # 显示wiener预测的光谱曲线
     plt.pause(0.001)
 
 
@@ -286,16 +287,15 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         # 用于存储重建的31通道的mat图像
         self.hsi_rebuilt_save_mat = 0
         self.rebuilt_image_scale = 2
-        #self.rebuild_base_image = my_resize_256(cv2.imread('./base.bmp'))
+        # self.rebuild_base_image = my_resize_256(cv2.imread('./base.bmp'))
         self.rebuild_base_image = 1
-        self.base_image_scale = 1         # *5 liang du
-
+        self.base_image_scale = 1  # *5 liang du
 
         # 决定是否显示光谱图像
         self.show_spectral_curve_flag = 0
 
         # 在gui上显示的光谱曲线的图片
-        self.spectral_curve_image = np.ones((500, 500, 3))*255
+        self.spectral_curve_image = np.ones((500, 500, 3)) * 255
 
         # 用于保存数据库人脸数据的路径 以及 数据库人脸的特征值
         self.face_rgb_database_filepath = './Database_rgb/temp.jpg'
@@ -303,7 +303,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.face_rgb_database_feat = 0
         self.face_mono_database_feat = 0
         self.texture_name = 'temp'
-        self.spectral_curve_wiener = np.zeros((1, 31))    #用于保存经过wiener估计得到的光谱曲线数据
+        self.spectral_curve_wiener = np.zeros((1, 31))  # 用于保存经过wiener估计得到的光谱曲线数据
 
         # 用于表示人脸识别是否开始的 flag
         self.face_rgb_recognition_flag = 0
@@ -381,8 +381,9 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 face_rgb_current_feat = arcface_getfeature(self.arcface_net, align_face_img)
                 self.rgb_face_result = np.dot(self.face_rgb_database_feat, face_rgb_current_feat)
                 self.rgb_face_result = round(self.rgb_face_result, 3)
-                self.rgb_face_result = self.rgb_face_result*2.5 if self.rgb_face_result*2.5<1 else 1
-                self.label_text_name_left.setText('名称_材质:' + self.face_rgb_database_filepath.split('/')[-1].split('.')[0] + ' ' + 'face')
+                self.rgb_face_result = self.rgb_face_result * 2.5 if self.rgb_face_result * 2.5 < 1 else 1
+                self.label_text_name_left.setText(
+                    '名称_材质:' + self.face_rgb_database_filepath.split('/')[-1].split('.')[0] + ' ' + 'face')
                 self.label_text_conf_left.setText('置信度:' + str(round(self.rgb_face_result, 3)))
             except:
                 pass
@@ -401,9 +402,10 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 show = cv2.cvtColor(show, cv2.COLOR_RGB2BGR)
             except:
                 pass
-            self.label_text_name_left.setText("名称_材质" + '\n' + self.face_rgb_database_filepath.split('/')[-1].split('.')[0] + '_')
-            #showImage = QtGui.QImage(show.data, show.shape[1], show.shape[0], show.shape[1] * 3,QtGui.QImage.Format_RGB888)
-            #self.label_choice_face_left.setPixmap(QtGui.QPixmap.fromImage(showImage))
+            self.label_text_name_left.setText(
+                "名称_材质" + '\n' + self.face_rgb_database_filepath.split('/')[-1].split('.')[0] + '_')
+            # showImage = QtGui.QImage(show.data, show.shape[1], show.shape[0], show.shape[1] * 3,QtGui.QImage.Format_RGB888)
+            # self.label_choice_face_left.setPixmap(QtGui.QPixmap.fromImage(showImage))
 
         except:
             print('Did not choice file')
@@ -505,7 +507,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 '''
                 ######################################
                 # 根据网络重建的高光谱图得到中心点的光谱曲线图，并在gui中显示
-                #spectral_curve_image_array = show_spectral_curve_on_gui((go5100_rebuilt_image[int(go5100_rebuilt_image.shape[0]/2), int(go5100_rebuilt_image.shape[1]/2), :]).tolist())
+                # spectral_curve_image_array = show_spectral_curve_on_gui((go5100_rebuilt_image[int(go5100_rebuilt_image.shape[0]/2), int(go5100_rebuilt_image.shape[1]/2), :]).tolist())
                 if self.show_spectral_curve_flag:
                     self.show_spectral_curve_on_gui()
                     spectral_curve_image_array = cv2.resize(self.spectral_curve_image, (500, 500))
@@ -518,14 +520,17 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 #######################################
                 go5100_rebuilt_image = self.rebuilt_image_scale * (HSI2RGB(go5100_rebuilt_image))
 
-                go5100_rebuilt_image = self.base_image_scale*(np.divide(go5100_rebuilt_image, self.rebuild_base_image))
+                go5100_rebuilt_image = self.base_image_scale * (
+                    np.divide(go5100_rebuilt_image, self.rebuild_base_image))
                 go5100_rebuilt_image = (go5100_rebuilt_image.numpy()).astype(np.uint8)
 
-                go5100_rebuilt_overlay_image = get_overlay_diagram.get_overlay_image_from_hyperspectral((self.hsi_rebuilt_save_mat)*20)
+                go5100_rebuilt_overlay_image = get_overlay_diagram.get_overlay_image_from_hyperspectral(
+                    (self.hsi_rebuilt_save_mat) * 20)
                 # resize重建的光谱曲线，因为生成的是256*256，我们把他resize成500*500
                 go5100_rebuilt_overlay_image = cv2.resize(go5100_rebuilt_overlay_image, (500, 500))
                 showImage = QtGui.QImage(go5100_rebuilt_overlay_image.data, go5100_rebuilt_overlay_image.shape[1],
-                                         go5100_rebuilt_overlay_image.shape[0], go5100_rebuilt_overlay_image.shape[1] * 3,
+                                         go5100_rebuilt_overlay_image.shape[0],
+                                         go5100_rebuilt_overlay_image.shape[1] * 3,
                                          QtGui.QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
                 self.label_rebuild_hyper_image.setPixmap(QtGui.QPixmap.fromImage(showImage))
 
@@ -543,22 +548,24 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
                     # get face texture information
                     # 这个是使用网络重建的高光谱 进行材质判别
-                    #self.mono_face_texture_name = detect_texture.get_texture(hsi_rebuilt_save_data,self.mono_face_center_axis)
+                    # self.mono_face_texture_name = detect_texture.get_texture(hsi_rebuilt_save_data,self.mono_face_center_axis)
 
                     # 这个是使用维纳估计恢复的一条光谱曲线进行判别
                     self.mono_face_texture_name = detect_texture.get_texture_name(self.spectral_curve_wiener)[0]
                     current_camera_resp_list = (detect_texture.get_camera_resp_matrix(self.jai_go5100M_image))
-                    self.texture_name_from_camera_resp = detect_texture.get_texture_from_camera_resp(current_camera_resp_list)[0]
+                    self.texture_name_from_camera_resp = \
+                    detect_texture.get_texture_from_camera_resp(current_camera_resp_list)[0]
                     if self.mono_face_texture_name == self.texture_name_from_camera_resp == 'face':
                         self.texture_name_from_joint_forecast = 'face'
                     elif self.mono_face_texture_name == self.texture_name_from_camera_resp == 'screen':
                         self.texture_name_from_joint_forecast = 'screen'
-                    self.texture_name = self.face_mono_database_filepath.split('/')[-1].split('.')[0] + ' ' + self.texture_name_from_joint_forecast
-                    
-                    #if self.mono_face_texture_name == 'true':
+                    self.texture_name = self.face_mono_database_filepath.split('/')[-1].split('.')[
+                                            0] + ' ' + self.texture_name_from_joint_forecast
+
+                    # if self.mono_face_texture_name == 'true':
                     #    self.texture_name = self.face_mono_database_filepath.split('/')[-1].split('.')[0]
                     #    # self.label_text_name_right.setText('姓名:' + self.face_mono_database_filepath.split('/')[-1].split('.')[0])
-                    #elif self.mono_face_texture_name == 'screen':
+                    # elif self.mono_face_texture_name == 'screen':
                     #    self.texture_name = 'fake_screen'
 
                     # 经过retinaface得到人脸关键点后，经过人脸对齐算法 得到（112，112）的人脸图片
@@ -572,9 +579,9 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     self.mono_face_result = round(self.mono_face_result, 3)
                     self.label_text_name_right.setText('名称_材质:' + self.texture_name)
                     if self.texture_name_from_joint_forecast == 'face':
-                        self.mono_face_result = self.mono_face_result*1.5 if self.mono_face_result*1.5<1 else 1
+                        self.mono_face_result = self.mono_face_result * 1.5 if self.mono_face_result * 1.5 < 1 else 1
                     else:
-                        self.mono_face_result = self.mono_face_result/2 if self.mono_face_result/2>0.1 else 0.1
+                        self.mono_face_result = self.mono_face_result / 2 if self.mono_face_result / 2 > 0.1 else 0.1
                     self.mono_face_result = round(self.mono_face_result, 3)
                     self.label_text_conf_right.setText('置信度:' + str(self.mono_face_result))
                 elif self.combo_select_face_object.currentText() == 'object':
@@ -600,7 +607,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     self.mono_face_texture_score = self.mono_face_texture_result[1]
 
                     current_camera_resp_list = (detect_texture.get_camera_resp_matrix(self.jai_go5100M_image))
-                    self.texture_result_from_camera_resp = detect_texture.get_texture_from_camera_resp(current_camera_resp_list)
+                    self.texture_result_from_camera_resp = detect_texture.get_texture_from_camera_resp(
+                        current_camera_resp_list)
                     self.texture_name_from_camera_resp = self.texture_result_from_camera_resp[0]
                     self.texture_score_from_camera_resp = self.texture_result_from_camera_resp[1]
 
@@ -611,7 +619,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     else:
                         self.texture_name_from_joint_forecast = ' '
                     self.texture_name = self.texture_name_from_joint_forecast
-                    #print(self.texture_name)
+                    # print(self.texture_name)
 
                     if self.texture_name_from_joint_forecast != ' ':
                         if self.texture_name_from_joint_forecast == 'tank':
@@ -667,7 +675,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             if self.face_mono_recognition_flag:
                 sio.savemat('./hyperspectral_image.mat', {'data': self.hsi_rebuilt_save_mat})
                 if self.line_edit_get_texture_text.text() != None:
-                    texture_name =  self.line_edit_get_texture_text.text()
+                    texture_name = self.line_edit_get_texture_text.text()
                     print('adding texture!')
                     detect_texture.load_texture_data(texture_name, (self.spectral_curve_wiener).tolist())
                     camera_resp_list = (detect_texture.get_camera_resp_matrix(self.jai_go5100M_image)).tolist()
@@ -684,7 +692,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             # 先通过 unet 重建rgb图像
             go5100_rebuilt_image = msnet_get_recimage(self.msnet_unet, database_img)
             go5100_rebuilt_image = self.rebuilt_image_scale * (HSI2RGB(go5100_rebuilt_image))
-            go5100_rebuilt_image = self.base_image_scale*(np.divide(go5100_rebuilt_image, self.rebuild_base_image))
+            go5100_rebuilt_image = self.base_image_scale * (np.divide(go5100_rebuilt_image, self.rebuild_base_image))
             go5100_rebuilt_image = (go5100_rebuilt_image.numpy()).astype(np.uint8)
             # 再进行识别
 
@@ -728,4 +736,3 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         spectral_curve_image_array = spectral_curve_image_array[:, :, :3]
         self.spectral_curve_image = spectral_curve_image_array
         # cv2.imshow('img', rgb_image)
-

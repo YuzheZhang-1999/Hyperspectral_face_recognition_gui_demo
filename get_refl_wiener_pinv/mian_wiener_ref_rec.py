@@ -85,7 +85,7 @@ def get_camera_resp(image_path_dir):
             print(file_name)
             image_array = cv2.imread(file_name)
             for i in range(9):
-                camera_resp[pic_count, i] = image_array[pic_feature_axis[i][0], pic_feature_axis[i][1], 0]
+                camera_resp[pic_count, i] = image_array[pic_feature_axis[i][1], pic_feature_axis[i][0], 0]
     camera_resp = (camera_resp / 255).squeeze()
     return camera_resp
 

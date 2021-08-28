@@ -16,7 +16,7 @@ if __name__ == '__main__':
             print(file_name)
             image_array = cv2.imread(file_name)
             for i in range(9):
-                camera_resp[pic_count, i] = image_array[pic_feature_axis[i][0], pic_feature_axis[i][1], 0]
+                camera_resp[pic_count, i] = image_array[pic_feature_axis[i][1], pic_feature_axis[i][0], 0]
     camera_resp = camera_resp/255
     np.savetxt(train_resp_txt_path, camera_resp, fmt="%f", delimiter=',')
     print('用于训练的数据保存在了： ' + train_resp_txt_path)

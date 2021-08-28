@@ -8,9 +8,9 @@ import json
 
 
 def get_texture(img_array, detect_face_axis):
-    paper_face_data_file = '../other_utils/paper_face.mat'
-    true_face_data_file = '../other_utils/true_face.mat'
-    screen_face_data_file = '../other_utils/screen_face.mat'
+    paper_face_data_file = '../other_utils/mat_database/paper_face.mat'
+    true_face_data_file = '../other_utils/mat_database/true_face.mat'
+    screen_face_data_file = '../other_utils/mat_database/screen_face.mat'
     paper_face_data = scio.loadmat(paper_face_data_file)
     true_face_data = scio.loadmat(true_face_data_file)
     screen_face_data = scio.loadmat(screen_face_data_file)
@@ -30,40 +30,6 @@ def get_texture(img_array, detect_face_axis):
     sim_img_array_true = np.zeros(num_feature_dot)
     sim_img_array_screen = np.zeros(num_feature_dot)
     sim_img_array_paper = np.zeros(num_feature_dot)
-
-    '''
-    #欧氏距离
-    #sim_img_array_paper = np.linalg.norm(img_array[detect_face_axis[0], detect_face_axis[1], :]-paper_face_array[center_axis_x, center_axis_y, :])
-    sim_img_array_true[0] = np.linalg.norm(img_array[detect_face_axis[0], 	      detect_face_axis[1],             :] - true_face_data[center_axis_x, 	      center_axis_y, 		 :])
-    sim_img_array_true[1] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1]-fea_dot_dis, :] - true_face_data[center_axis_x-fea_dot_dis, center_axis_y-fea_dot_dis, :])
-    sim_img_array_true[2] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1]+fea_dot_dis, :] - true_face_data[center_axis_x-fea_dot_dis, center_axis_y+fea_dot_dis, :])
-    sim_img_array_true[3] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1]-fea_dot_dis, :] - true_face_data[center_axis_x+fea_dot_dis, center_axis_y-fea_dot_dis, :])
-    sim_img_array_true[4] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1]+fea_dot_dis, :] - true_face_data[center_axis_x+fea_dot_dis, center_axis_y+fea_dot_dis, :])
-    sim_img_array_true[5] = np.linalg.norm(img_array[detect_face_axis[0], 	      detect_face_axis[1]-fea_dot_dis, :] - true_face_data[center_axis_x, 	      center_axis_y-fea_dot_dis, :])
-    sim_img_array_true[6] = np.linalg.norm(img_array[detect_face_axis[0], 	      detect_face_axis[1]+fea_dot_dis, :] - true_face_data[center_axis_x, 	      center_axis_y+fea_dot_dis, :])
-    sim_img_array_true[7] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1],	       :] - true_face_data[center_axis_x-fea_dot_dis, center_axis_y, 		 :])
-    sim_img_array_true[8] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1], 	       :] - true_face_data[center_axis_x+fea_dot_dis, center_axis_y, 		 :])
-   
-    sim_img_array_screen[0] = np.linalg.norm(img_array[detect_face_axis[0], 		detect_face_axis[1], 		 :] - screen_face_data[center_axis_x, 		  center_axis_y, 	     :])
-    sim_img_array_screen[1] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1]-fea_dot_dis, :] - screen_face_data[center_axis_x-fea_dot_dis, center_axis_y-fea_dot_dis, :])
-    sim_img_array_screen[2] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1]+fea_dot_dis, :] - screen_face_data[center_axis_x-fea_dot_dis, center_axis_y+fea_dot_dis, :])
-    sim_img_array_screen[3] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1]-fea_dot_dis, :] - screen_face_data[center_axis_x+fea_dot_dis, center_axis_y-fea_dot_dis, :])
-    sim_img_array_screen[4] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1]+fea_dot_dis, :] - screen_face_data[center_axis_x+fea_dot_dis, center_axis_y+fea_dot_dis, :])
-    sim_img_array_screen[5] = np.linalg.norm(img_array[detect_face_axis[0],             detect_face_axis[1]-fea_dot_dis, :] - screen_face_data[center_axis_x,		  center_axis_y-fea_dot_dis, :])
-    sim_img_array_screen[6] = np.linalg.norm(img_array[detect_face_axis[0],             detect_face_axis[1]+fea_dot_dis, :] - screen_face_data[center_axis_x, 		  center_axis_y+fea_dot_dis, :])
-    sim_img_array_screen[7] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1],             :] - screen_face_data[center_axis_x-fea_dot_dis, center_axis_y,  	     :])
-    sim_img_array_screen[8] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1],		 :] - screen_face_data[center_axis_x+fea_dot_dis, center_axis_y, 	     :])
-
-    sim_img_array_paper[0] = np.linalg.norm(img_array[detect_face_axis[0], 	       detect_face_axis[1], 		:] - paper_face_data[center_axis_x, 		center_axis_y, 	             :])
-    sim_img_array_paper[1] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1]-fea_dot_dis, :] - paper_face_data[center_axis_x-fea_dot_dis, center_axis_y-fea_dot_dis,   :])
-    sim_img_array_paper[2] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1]+fea_dot_dis, :] - paper_face_data[center_axis_x-fea_dot_dis, center_axis_y+fea_dot_dis,   :])
-    sim_img_array_paper[3] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1]-fea_dot_dis, :] - paper_face_data[center_axis_x+fea_dot_dis, center_axis_y-fea_dot_dis,   :])
-    sim_img_array_paper[4] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1]+fea_dot_dis, :] - paper_face_data[center_axis_x+fea_dot_dis, center_axis_y+fea_dot_dis,   :])
-    sim_img_array_paper[5] = np.linalg.norm(img_array[detect_face_axis[0],             detect_face_axis[1]-fea_dot_dis, :] - paper_face_data[center_axis_x,		center_axis_y-fea_dot_dis,   :])
-    sim_img_array_paper[6] = np.linalg.norm(img_array[detect_face_axis[0],             detect_face_axis[1]+fea_dot_dis, :] - paper_face_data[center_axis_x, 		center_axis_y+fea_dot_dis,   :])
-    sim_img_array_paper[7] = np.linalg.norm(img_array[detect_face_axis[0]-fea_dot_dis, detect_face_axis[1],             :] - paper_face_data[center_axis_x-fea_dot_dis, center_axis_y,  	     :])
-    sim_img_array_paper[8] = np.linalg.norm(img_array[detect_face_axis[0]+fea_dot_dis, detect_face_axis[1],		:] - paper_face_data[center_axis_x+fea_dot_dis, center_axis_y, 	     	     :])
-    '''
 
     #余弦距离
     sim_img_array_true[0] = np.dot(img_array[detect_face_axis[0], detect_face_axis[1], :] , true_face_data[center_axis_x, center_axis_y, :]) \
@@ -92,7 +58,7 @@ def get_texture(img_array, detect_face_axis):
 
 
 def load_texture_data(texture_name, texture_refl_list):
-    texture_json_file = '../other_utils/texture_database.json'
+    texture_json_file = '../other_utils/json_database/texture_database.json'
     new_data = {texture_name: texture_refl_list}
     try:
         with open(texture_json_file, 'r',  encoding='utf-8') as f:
@@ -120,7 +86,7 @@ def get_texture_refl_wiener(img_array):
 
 
 def get_texture_name(refl_test):
-    texture_json_file = '../other_utils/texture_database.json'
+    texture_json_file = '../other_utils/json_database/texture_database.json'
     texture_scores_dict = {}
     with open(texture_json_file, 'r', encoding='utf-8') as texture_json_file:
         texture_database = json.load(texture_json_file)
@@ -140,13 +106,13 @@ def get_camera_resp_matrix(input_image):
     except:
         image_array = input_image
     for i in range(9):
-        camera_resp[0, i] = image_array[pic_feature_axis[i][0], pic_feature_axis[i][1]]
+        camera_resp[0, i] = image_array[pic_feature_axis[i][1], pic_feature_axis[i][0]]
     camera_resp = camera_resp/255
     return camera_resp
 
 
 def load_camera_resp_data(camera_resp_object_name, camera_resp_list):
-    camera_resp_json_file = '../other_utils/camera_resp_database.json'
+    camera_resp_json_file = '../other_utils/json_database/camera_resp_database.json'
     new_data = {camera_resp_object_name: camera_resp_list}
     try:
         with open(camera_resp_json_file, 'r',  encoding='utf-8') as f:
@@ -162,7 +128,7 @@ def load_camera_resp_data(camera_resp_object_name, camera_resp_list):
 
 
 def get_texture_from_camera_resp(resp_test):
-    camera_resp_json_file = '../other_utils/camera_resp_database.json'
+    camera_resp_json_file = '../other_utils/json_database/camera_resp_database.json'
     texture_scores_from_resp_dict = {}
     with open(camera_resp_json_file, 'r', encoding='utf-8') as f:
         camera_resp_database = json.load(f)
